@@ -1,3 +1,4 @@
 def check(search_string):
-    return {'probability': 31,
+    return {'truthfullness': 64,
+            'probability': 0.64,
             'related_tweets': []}
