@@ -2,8 +2,8 @@
 Private repo for 2018 group design practical
 
 TODO:
-- [IMPLEMENT] jumbotron for tweets
-- [IMPLEMENT] graphic for probability
+- [IMPLEMENT] auto hashtag formatting
+  - Wait until certain on input type
 - [ACTION]    ask group how tweets will be returned to you
               research first as unlikely they will have ideas
 - [CONSIDER]  Loading time display issues
@@ -22,3 +22,12 @@ VISION:
 - hashtag is automatically added even on spacebar
 - press enter or hit search, search bar flies up and out, loading symbol flies up and in
 - when loaded, black background fades away to reveal white background and results
+
+OLD POINTS
+- [RESEARCHED] hosting
+  - easy for heroku
+- [IMPLEMENT GONE RIGHT] graphic for probability
+  - Used JQUERY add on
+  - copied folder from node_modules to static
+- [IMPLEMENT GONE WRONG] jumbotron for tweets
+  - Tweets wrong size so looked silly
