@@ -3,3 +3,8 @@ def url_from_form(form_data):
 
 def readable_from_url(url):
     return " #"+" #".join(url.split('-'))
+
+def get_credentials():
+    with open('credentials.txt', 'r') as cred_file:
+        contents = cred_file.read()
+        return (contents[0], contents[1])
