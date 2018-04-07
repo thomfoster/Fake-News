@@ -4,6 +4,7 @@ from flask import Flask, render_template, url_for, request, redirect, jsonify
 import twython
 app = Flask(__name__)
 
+# Get Twitter API credentials from a plain text file
 APP_KEY, ACCESS_TOKEN = helpers.get_credentials()
 twitter = twython.Twython(APP_KEY, access_token=ACCESS_TOKEN)
 
