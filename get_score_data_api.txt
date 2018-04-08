@@ -1,0 +1,49 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 get_score_data(tweets)\
+(tweets = a list of jsons of tweets)\
+\
+returns a json outData\
+\
+nTweets : number of tweets in our sample\
+\
+credScore: credibility score by our machine learning model\
+\
+earliestTweet: the json data of earliest tweet\
+latestTweet: the json data of latest tweet\
+creationTimes: a list of creation times of entry\
+timeZoneDistribution: a list whose ith entry is number of tweets in time zone i\
+\
+tweetsByVerified :  a list of tweets json data by verified user\
+verifiedUsers: a list of username of verified user involved\
+\
+aveFriendCount: average of friend counts of users involved\
+friendCounts : a list of friend counts of users involved\
+\
+# (status count = number of tweets including retweets issued by the user)\
+aveStatusCount: average of status counts of users involved\
+statusCounts: a list of status counts of users involved\
+\
+percentageUsersWithUrl: percentage of users with url\
+\
+percentageTweetsWithUrl : percentage of tweets with url\
+tweetsWithUrl : number of tweets with url\
+\
+aveHashtagsInTweets: average number of hashtags in tweets\
+aveSymbolsInTweets: average number of symbols in tweets\
+\
+tweetsFavoriteCounts: a list of favourite counts of tweets\
+aveTweetsFavoriteCount: average of favourite counts\
+\
+aveRetweetCount: average of retweet counts\
+retweetCounts: a list of retweet counts\
+\
+avReplyCount: average reply count\
+replyCounts: a list of reply counts\
+\
+tweetsCoordinates: a list of coordinates where tweets are posted}
