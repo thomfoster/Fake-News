@@ -1,21 +1,49 @@
-import twython
+from twython import Twython
 from flask import Markup
 
-def check(search_string, twitter):
-    truthfullness = 64
-    related_tweets = [982231162704637952, 982239010226487296, 982241282108960768]
-    if search_string=="trump-missile-launch":
-        truthfullness = 4
-        related_tweets = [980567693089701890, 979887418370330624, 979861054296530944]
-    elif search_string=="walcott-leaves-arsenal":
-        truthfullness = 20
-        related_tweets = [903247473375932416, 369483614796259328, 311925288558800896]
-    elif search_string=="sanchez-transfer":
-        truthfullness = 98
-        related_tweets = [982229703187574786, 982222357212221441, 982199233762639874]
+from get_score import get_score_data
+import helpers, json
 
+# Get Twitter API credentials from a plain text file
+APP_KEY, ACCESS_TOKEN = helpers.get_credentials()
+twitter = Twython(APP_KEY, access_token=ACCESS_TOKEN)
 
-    return {'truthfullness': truthfullness,
-            'probability': truthfullness/100,
-            'related_tweets': list(map(lambda x: Markup(twitter.get_oembed_tweet(id = x)['html']), related_tweets))}
+def check(news_string):
+    tweets = get_relevant_tweets(news_string)
+    score = get_score_data(tweets)
+    related = [tweets[0]['id'], tweets[1]['id'], tweets[2]['id']]
+    return {'truthfullness': score['credScore'],
+            'probability': score['credScore']/100,
+            'related_tweets': list(map(lambda x: Markup(twitter.get_oembed_tweet(id=x)['html']), related))}
 
+def get_relevant_tweets(subject):
+    res = []
+
+    count = 0
+    lastId = None
+    canFindTweets = True
+    subj = subject
+    subject += ' -filter:retweets'
+    while (count < 20) and canFindTweets:
+        if lastId is None:
+            searchResults = twitter.search(q=subject,
+                                            count=100,
+                                            lang='en')['statuses']
+        else:
+            searchResults = twitter.search(q=subject,
+                                            count=100,
+                                            lang='en',
+                                            max_id=lastId)['statuses']
+    
+        searchResults = sorted(searchResults, key=lambda tweet: tweet['id'])
+        if len(searchResults) < 100:
+            canFindTweets = False
+        else:
+            lastId = searchResults[0]['id']
+    
+        print(lastId)
+        res += searchResults
+        count += 1
+    print('{} tweets found for subject \"{}\"'.format(len(res), subj))
+
+    return res

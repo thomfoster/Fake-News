@@ -6,5 +6,5 @@ def readable_from_url(url):
 
 def get_credentials():
     with open('credentials.txt', 'r') as cred_file:
-        contents = cred_file.read()
+        contents = cred_file.read().split('\n')
         return (contents[0], contents[1])

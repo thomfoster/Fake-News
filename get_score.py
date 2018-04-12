@@ -53,14 +53,11 @@ lclf.fit(x_data_scaled_normal, y_data)
 def get_score_data(tweets):
     n = len(tweets)
     
-    tweetlist = []
+    tweetlist = tweets
     metrics = []
     outData = {}
     outData['nTweets'] = n
     
-    for t in tweets:
-        j = json.loads(t)
-        tweetlist.append(j)
       
     #1. in_reply_to_status_id_str
     x = 0
