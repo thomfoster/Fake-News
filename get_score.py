@@ -56,12 +56,12 @@ def get_score_data(tweets):
     outData['nTweets'] = n
     
     #if tweets is a list of json object
-    for t in tweets:
-        j = json.loads(t)
-        tweetlist.append(j)
+    #for t in tweets:
+    #   j = json.loads(t)
+    #   tweetlist.append(j)
         
     #if tweets is a list of python dictionary already:
-    #tweetlist = tweets
+    tweetlist = tweets
       
     #1. in_reply_to_status_id_str
     x = 0
@@ -505,6 +505,7 @@ def get_score_data(tweets):
     #34,35. semantic analysis
     metrics.append(averageCompound)
     metrics.append(compound_var)
+    outData['semanticScores'] = tweetsSemaScore
     outData['percentagePosTweets'] = posTweets/n
     outData['percentageNegTweets'] = negTweets/n
     outData['strongPosTweets'] = tweetsWithStrongPos
