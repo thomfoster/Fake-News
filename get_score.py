@@ -1,35 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Apr  7 14:56:22 2018
 
-@author: cloverye
-"""
 import csv, json, sys
 import pandas as pd
 import numpy as np
 from datetime import datetime
 from datetime import timezone
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 #import dataset
 data = pd.read_csv('twitter_topic_cred.csv')
 x_data = data.loc[:,['in_reply_to_status_id_str',
        'created_at_ave_after_first_time', 'created_at_var', 
-       'is_quote_status',
        'time_zone', 'time_zone_var', 
        'has_extended_profile', 'default_profile',
        'name_length_ave', 'created_at_ave_after_first_user',
-       'followers_count_ave','followers_count_var',
+       'followers_count_ave', 'followers_count_var',
        'favourites_count_ave',
        'screen_name_length_ave', 'screen_name_length_var', 'verified_no',
        'friends_count_ave','friends_count_var', 
-       'geo_enabled_true',
-       'statuses_count_ave', 'statuses_count_var', 'tweets_lang_non_English',
-       'is_translation_enabled', 'non_url_no','urls_no',
-       'hashtags_no', 'symbols_no', 
+       'statuses_count_ave', 'statuses_count_var', 'user_lang_non_English',
+       'urls_no',
+       'ave_hashtags',
        'favorite_count_ave','favorite_count_var',
        'place_non_null', 'text_length_ave',
-       'retweet_count_ave','retweet_count_var']].values
+       'retweet_count_ave','retweet_count_var','compound', 'compound_var'
+       ]].values
                          
 y_data = data.loc[:,'score'].values
  
@@ -53,11 +50,17 @@ lclf.fit(x_data_scaled_normal, y_data)
 def get_score_data(tweets):
     n = len(tweets)
     
-    tweetlist = tweets
     metrics = []
     outData = {}
     outData['nTweets'] = n
     
+    #if tweets is a list of json object
+    #for t in tweets:
+    #   j = json.loads(t)
+    #   tweetlist.append(j)
+        
+    #if tweets is a list of python dictionary already:
+    tweetlist = tweets
       
     #1. in_reply_to_status_id_str
     x = 0
@@ -108,6 +111,7 @@ def get_score_data(tweets):
     metrics.append(timevariance)
     
     #4.is_quote_status
+    '''
     x=0
     res=0.0
     for tweet in tweetlist:
@@ -115,6 +119,7 @@ def get_score_data(tweets):
             x=x+1
     res=x/n
     metrics.append(res)
+    '''
     
     #5.'time_zone'
     #time_11bool = False,time_10bool = False,time_9bool = False,time_8bool = False,time_7bool = False,time_6bool = False,time_5bool = False,time_4bool = False,time_3bool = False,time_2bool = False,time_1bool = False, time0bool = False, time1bool = False, time2bool = False, time3bool = False, time4bool = False, time5bool = False, time6bool = False, time7bool = False, time8bool = False, time9bool = False, time10bool = False, time11bool = False,time12bool = False, time13bool = False, time_230bool = False, time530bool = False, time630bool = False, time930bool = False
@@ -329,6 +334,7 @@ def get_score_data(tweets):
     metrics.append(va)
     
     #19.'geo_enabled_true'
+    '''
     x=0
     res=0.0
     for tweet in tweetlist:
@@ -336,7 +342,7 @@ def get_score_data(tweets):
             x=x+1
     res=x/n
     metrics.append(res)
-            
+    '''      
             
     #20. 'statuses_count_ave'
     s = []
@@ -363,6 +369,7 @@ def get_score_data(tweets):
             
             
     #23.'is_translation_enabled'
+    '''
     x=0
     res=0.0
     for tweet in tweetlist:
@@ -370,15 +377,16 @@ def get_score_data(tweets):
             x=x+1
     res=x/n
     metrics.append(res)
-            
-    #24.'non_url_no'
+    '''
+    
+    #24.'non_url_no'(!!NOT IN METRICS)
     x=0
     res=0.0
     for tweet in tweetlist:
         if tweet['user']['url'] != None:
             x=x+1
     res=x/n
-    metrics.append(res)
+    #metrics.append(res)
     
     outData['percentageUsersWithUrl'] = res
     
@@ -395,21 +403,21 @@ def get_score_data(tweets):
     outData['tweetsWithUrl'] = x
     
             
-    #26.'hashtags_no'
+    #26.'ave_hashtags'
     x=0
-    res=0.0
+    #res=0.0
     total = 0
     for tweet in tweetlist:
         if tweet['entities']['hashtags'] != []:
             x=x+1
             total += len(tweet['entities']['hashtags'])
-    res=x/n
-    metrics.append(res)
-    
+    #res=x/n
+    #metrics.append(res)
     av = total/n
+    metrics.append(av)
     outData['aveHashtagsInTweets'] = av
     
-    #27.'symbols_no'
+    #27.'ave_symbols'
     x=0
     res=0.0
     total = 0
@@ -417,9 +425,8 @@ def get_score_data(tweets):
         if tweet['entities']['symbols'] != []:
             x=x+1
             total += len(tweet['entities']['symbols'])
-    res=x/n
-    metrics.append(res)
-    
+    #res=x/n
+    #metrics.append(res)
     av = total/n 
     outData['aveSymbolsInTweets'] = av
     
@@ -450,10 +457,33 @@ def get_score_data(tweets):
     
     #31.'text_length_ave'
     totallength = 0
+    posTweets = 0
+    negTweets = 0
+    tweetsSemaScore = []
+    analyzer = SentimentIntensityAnalyzer()
     for tweet in tweetlist:
         if tweet['text'] != None:
             totallength = totallength + len(tweet['text'])
+            scores = analyzer.polarity_scores(tweet['text'])
+            tweetsSemaScore.append(scores['compound'])
+            if scores['compound'] > 0:
+                posTweets = posTweets + 1
+            elif scores['compound'] < 0:
+                negTweets = negTweets + 1
+        else:
+            tweetsSemaScore.append(0)
     averagelength = totallength/n
+    averageCompound = np.mean(tweetsSemaScore)
+    compound_var = np.var(tweetsSemaScore)
+    upperPercentile = np.percentile(tweetsSemaScore,75)
+    lowerPercentile = np.percentile(tweetsSemaScore,25)
+    tweetsWithStrongPos = []
+    tweetsWithStrongNeg = []
+    for i in range(len(tweetlist)):
+        if tweetsSemaScore[i] > max(upperPercentile,0):
+            tweetsWithStrongPos.append(tweetlist[i])
+        elif tweetsSemaScore[i] < min(lowerPercentile, 0):
+            tweetsWithStrongNeg.append(tweetlist[i])
     metrics.append(averagelength)
         
     
@@ -471,12 +501,23 @@ def get_score_data(tweets):
     va=np.var(r)
     metrics.append(va)
     
- 
+    #34,35. semantic analysis
+    metrics.append(averageCompound)
+    metrics.append(compound_var)
+    outData['semanticScores'] = tweetsSemaScore
+    outData['percentagePosTweets'] = posTweets/n
+    outData['percentageNegTweets'] = negTweets/n
+    outData['strongPosTweets'] = tweetsWithStrongPos
+    outData['strongNegTweets'] = tweetsWithStrongNeg
+    outData['aveSemaScore'] = averageCompound
+    outData['varSemaScore'] = compound_var
+    
+    
     '''
     metrics:
        0.'in_reply_to_status_id_str',
        1.'created_at_ave_after_first_time', 2.'created_at_var', 
-       3.'is_quote_status',
+       ###3.'is_quote_status',
        4.'time_zone', 5.'time_zone_var', 
        6.'has_extended_profile', 7.'default_profile',
        8.'name_length_ave', 9.'created_at_ave_after_first_user',
@@ -485,13 +526,15 @@ def get_score_data(tweets):
        13.'screen_name_length_ave', 14.'screen_name_length_var', 
        15.'verified_no',
        16.'friends_count_ave', 17.'friends_count_var', 
-       18.'geo_enabled_true',
-       19.'statuses_count_ave', 20.'statuses_count_var',21.'lang_non_English',
-       22.'is_translation_enabled', 23.'non_url_no',24.'urls_no',
-       25.'hashtags_no', 26.'symbols_no', 
+       ###18.'geo_enabled_true',
+       19.'statuses_count_ave', 20.'statuses_count_var',21.'user_lang_non_English',
+       ###22.'is_translation_enabled', ###23.'non_url_no',
+       24.'urls_no',
+       25.'ave_hashtags', ###26.'symbols_no', 
        27.'favorite_count_ave',28.'favorite_count_var',
        29.'place_non_null', 30.'text_length_ave',
        31.'retweet_count_ave',32.'retweet_count_var'
+       33.'compound', 34.'compound_var'
      '''
      
     
@@ -510,7 +553,6 @@ def get_score_data(tweets):
     for tweet in tweetlist:
         if tweet['coordinates'] != None:
             c.append(tweet['coordinates'])
-    
     outData['tweetsCoordinates'] = c
     
     #calculate credibility score
