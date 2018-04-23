@@ -14,7 +14,9 @@ def check(news_string):
     related = [tweets[0]['id'], tweets[1]['id'], tweets[2]['id']]
     return {'truthfullness': score['credScore'],
             'probability': score['credScore']/100,
-            'related_tweets': list(map(lambda x: Markup(twitter.get_oembed_tweet(id=x)['html']), related))}
+            'related_tweets': list(map(lambda x: Markup(twitter.get_oembed_tweet(id=x)['html']), related)),
+            'strongPosTweets': score['strongPosTweets'],
+            'nTweets': score['nTweets']}
 
 def get_relevant_tweets(subject):
     res = []
@@ -34,13 +36,13 @@ def get_relevant_tweets(subject):
                                             count=100,
                                             lang='en',
                                             max_id=lastId)['statuses']
-    
+
         searchResults = sorted(searchResults, key=lambda tweet: tweet['id'])
         if len(searchResults) < 100:
             canFindTweets = False
         else:
             lastId = searchResults[0]['id']
-    
+
         print(lastId)
         res += searchResults
         count += 1
