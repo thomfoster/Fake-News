@@ -8,6 +8,7 @@ from datetime import datetime
 from datetime import timezone
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import math
 
 #import dataset
 data = pd.read_csv('twitter_topic_cred.csv')
@@ -58,7 +59,10 @@ def get_score_data(tweets):
     #for t in tweets:
     #   j = json.loads(t)
     #   tweetlist.append(j)
-        
+    
+    if len(tweets) == 0:
+        return outData
+    
     #if tweets is a list of python dictionary already:
     tweetlist = tweets
       
@@ -100,8 +104,8 @@ def get_score_data(tweets):
     metrics.append(timeaverage)   
     
     #earliest tweets under the topic
-    outData['earliestTweet'] = tweetlist[earliesttimeentry]
-    outData['latestTweet'] = tweetlist[latesttimeentry]
+    outData['earliestTweet'] = tweetlist[earliesttimeentry]['id']
+    outData['latestTweet'] = tweetlist[latesttimeentry]['id']
     for i in range(len(timeseries)):
         timeseries[i] = timeseries[i].isoformat()
     outData['creationTimes'] = timeseries
@@ -310,7 +314,7 @@ def get_score_data(tweets):
         if tweetlist[t]['user']['verified'] != False:
             x=x+1
             verified_user.append(tweet['user']['screen_name'])
-            tweets_by_verified.append(tweets[t])
+            tweets_by_verified.append(tweets[t]['id'])
     res=x/n
     metrics.append(res)
     
@@ -481,9 +485,9 @@ def get_score_data(tweets):
     tweetsWithStrongNeg = []
     for i in range(len(tweetlist)):
         if tweetsSemaScore[i] > max(upperPercentile,0):
-            tweetsWithStrongPos.append(tweetlist[i])
+            tweetsWithStrongPos.append(tweetlist[i]['id'])
         elif tweetsSemaScore[i] < min(lowerPercentile, 0):
-            tweetsWithStrongNeg.append(tweetlist[i])
+            tweetsWithStrongNeg.append(tweetlist[i]['id'])
     metrics.append(averagelength)
         
     
@@ -552,7 +556,7 @@ def get_score_data(tweets):
     c = []
     for tweet in tweetlist:
         if tweet['coordinates'] != None:
-            c.append(tweet['coordinates'])
+            c.append(tweet['coordinates']['coordinates'])
     outData['tweetsCoordinates'] = c
     
     #calculate credibility score
@@ -562,8 +566,17 @@ def get_score_data(tweets):
     #print(score)
     score = round(min(max((score[0]+2)/4 * 100, 0), 100))
     
+    adjusted_score = score
+    if score < 80:
+        #linear: adjusted_score = score * 0.125
+        #quadratic: 
+        adjusted_score = -((math.sqrt(10)/80) * score - math.sqrt(10))^2 + 10
+    else:
+        #linear
+        adjusted_score = score * 9/2 - 350
+        
     #output dictionary
-    outData['credScore'] = score 
+    outData['credScore'] = adjusted_score 
     return outData
     
 
