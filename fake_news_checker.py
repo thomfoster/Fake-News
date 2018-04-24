@@ -10,13 +10,10 @@ twitter = Twython(APP_KEY, access_token=ACCESS_TOKEN)
 
 def check(news_string):
     tweets = get_relevant_tweets(news_string)
-    score = get_score_data(tweets)
-    related = [tweets[0]['id'], tweets[1]['id'], tweets[2]['id']]
-    return {'truthfullness': score['credScore'],
-            'probability': score['credScore']/100,
-            'related_tweets': list(map(lambda x: Markup(twitter.get_oembed_tweet(id=x)['html']), related)),
-            'strongPosTweets': score['strongPosTweets'],
-            'nTweets': score['nTweets']}
+    data = get_score_data(tweets)
+    # data['strongPosTweets'] = list(map(lambda x: Markup(twitter.get_oembed_tweet(id=x)['html']), data['strongPosTweets']))
+    # data['strongNegTweets'] = list(map(lambda x: Markup(twitter.get_oembed_tweet(id=x)['html']), data['strongNegTweets']))
+    return data
 
 def get_relevant_tweets(subject):
     res = []
