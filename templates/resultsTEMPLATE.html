@@ -9,6 +9,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='jquery-circle-progress/dist/circle-progress.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='chart-js/Chart.min.js') }}"></script>
 </head>
 
 <body>
@@ -31,54 +32,173 @@
 	</nav>
 
 	<br>
-	<br>
 
 	<div class="container">
 
-		<div class="jumbotron">
+		<div class="jumbotron bg-dark">
 		<div class="row justify-content-between">
-			<div class="col-sm-4">
-				<b><h1 style="color: red"> {{data['truthfullness']}}% </h1></b>
-				<p> The overall truth rating of <b> {{data['nTweets']}} </b> tweets relating to <b>{{search_string}}</b> </p>
+			<div class="col-sm-7">
+				 <font color="white">
+				<b><h1 style="color: #28A745"> {{data['credScore']}}% </h1></b>
+				<h3> The overall truth rating of <b> {{data['nTweets']}} </b> tweets relating to <b>{{search_string}}</b> </h3>
 				<br>
+				</font>
 			</div>
-			<div id="circle" class="col-sm-4">
+			<div id="circle" class="col-sm-3">
 			</div>
 			<script>
 				$('#circle').circleProgress({
-				value: {{data['probability']}},
+				value: {{data['credScore']/100}},
 				startAngle: -1.57,
-				size: 150,
-				fill: 'green',
-				thickness: 30,
+				size: 175,
+				fill: '#28A745',
+				thickness: 40,
 				});
 			</script>
 		</div>
+		</div>
+
+		<h3>Core Metrics:</h3>
+		<hr>
+
+		<div class="row">
+
+		<div class="col">
+			<div class="card bg-light" style="width:250px">
+				<div class="card-body">
+					<h4 class="card-title">Average Retweet Count</h4>
+					<p class="card-text">{{data['aveRetweetCount']}}</p>
+				</div>
+			</div>
+		</div>
+
+		<br>
+
+		<div class="col">
+			<div class="card bg-light" style="width:250px">
+				<div class="card-body">
+					<h4 class="card-title">Average Follower Count Count</h4>
+					<p class="card-text">{{data['aveFriendCount']}}</p>
+				</div>
+			</div>
+		</div>
+
+		<br>
+
+		<div class="col">
+			<div class="card bg-light" style="width:250px">
+				<div class="card-body">
+					<h4 class="card-title">Average Reply Count</h4>
+					<p class="card-text">{{data['avReplyCount']}}</p>
+				</div>
+			</div>
+		</div>
+
+		<br>
+
+		<div class="col">
+			<div class="card bg-light" style="width:250px">
+				<div class="card-body">
+					<h4 class="card-title">Average Hashtag Count</h4>
+					<p class="card-text">{{data['aveHashtagsInTweets']}}</p>
+				</div>
+			</div>
+		</div>
+
+		<br>
+
 		</div>
 
 		<br>
 		<h3>Important Tweets Relating to Your Story</h3>
 		<hr>
 
-		<div class="row">
-			<div class="col-md-4">
-            {{data['related_tweets'][0]}}
-            </div>
-			<div class="col-md-4">
-            {{data['related_tweets'][1]}}
-			</div>
-			<div class="col-md-4">
-            {{data['related_tweets'][2]}}
-			</div>
+		<div class="row justify-content-center">
+			<div class="col-4">VERIFIED USERS TWEETS</div>
+			<div class="col-4">VERIFIED USERS TWEETS</div>
+			<div class="col-4">VERIFIED USERS TWEETS</div>
 		</div>
 
 		<br>
+		<h3>Semantic Analysis:</h3>
+		<hr>
+		<div class="row justify-content-center">
+			<br>
+			<div class="col-4">
+				<canvas id="piechart" width="300" height="300"></canvas>
+				<script>
+				var pieData = [
+				{% for item,label,colors in set %}
+				{
+				value: {{item}},
+				label: "{{label}}",
+				color : "{{colors}}"
+				},
+				{% endfor %}
+				];
+				// get bar chart canvas
+				var mychart = document.getElementById("piechart").getContext("2d");
+				steps = 10
+				max = 10
+				// draw pie chart
+				new Chart(document.getElementById("piechart").getContext("2d")).Doughnut(pieData);
+	 		</script>
+		</div>
+		<div class="col-4">
+			<p> EMBED MOST POSITIVE TWEET HERE </p>
+		</div>
+		<div class="col-4">
+			<p> EMBED MOST NEGATIVE TWEET HERE </p>
+		</div>
+		</div>
 		<br>
-		<h3>Popularity over time</h3>
+		<h3>How the story broke:</h3>
 		<hr>
 
 		<div class="row justify-content-center">
-		<image src="/static/graph.png" width=100%>
+			<canvas id="chart" width="800" height="400"></canvas>
+			<script>
+				var barData = {
+					labels : [{% for item in time_chart_data[0] %}
+				                  "{{item}}",
+				              {% endfor %}],
+				   datasets : [
+				      {
+				            fillColor: "rgba(151,187,205,0.2)",
+				            strokeColor: "rgba(151,187,205,1)",
+				            pointColor: "rgba(151,187,205,1)",
+				            pointStrokeColor: "#fff",
+				            pointHighlightFill: "#fff",
+				            pointHighlightStroke: "rgba(151,187,205,1)",
+				            bezierCurve : true,
+				            data : [{% for item in time_chart_data[1] %}
+				                      {{item}},
+				                    {% endfor %}]
+				      }]
+				   }
+
+				    Chart.defaults.global.animationSteps = 50;
+				    Chart.defaults.global.tooltipYPadding = 16;
+				    Chart.defaults.global.tooltipCornerRadius = 0;
+				    Chart.defaults.global.tooltipTitleFontStyle = "normal";
+				    Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+				    Chart.defaults.global.animationEasing = "easeOutBounce";
+				    Chart.defaults.global.scaleLineColor = "black";
+						Chart.defaults.global.responsive = true;
+				    Chart.defaults.global.scaleFontSize = 16;
+
+				   // get bar chart canvas
+				   var mychart = document.getElementById("chart").getContext("2d");
+
+				   // draw bar chart
+				   var LineChartDemo = new Chart(mychart).Line(barData, {
+				        scaleShowVerticalLines: true,
+				        scaleShowGridLines : true,
+				        barShowStroke : true,
+				        scaleShowLabels: true,
+				        bezierCurve: true,
+				   });
+				</script>
 		</div>
 
 	</div>

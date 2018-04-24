@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Fake News Checker</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='jquery-circle-progress/dist/circle-progress.js') }}"></script>
+</head>
+
+<body>
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-between">
+	<div class="container">
+		<a class="navbar-brand" href={{ url_for('index') }}>Fake News Checker</a>
+		<form action="/" method="POST" class="form-inline">
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">#</span>
+				</div>
+				<input name="data" type="text" class="form-control" placeholder="Search again">
+				<div class="input-group-append">
+					<button class="btn btn-success" type="submit">Search</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	</nav>
+
+	<br>
+	<br>
+
+	<div class="container">
+
+		<div class="jumbotron">
+		<div class="row justify-content-between">
+			<p> <center> We're sorry, there wasn't enough tweets in the last 7 days releating to <b>{{ search_string }}</b> </center></p>
+		</div>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

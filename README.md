@@ -31,3 +31,23 @@ OLD POINTS
   - copied folder from node_modules to static
 - [IMPLEMENT GONE WRONG] jumbotron for tweets
   - Tweets wrong size so looked silly
+
+  WHATS GOING ON TWEETS ie verified
+  <!-- TIME SERIES GRAPH -->
+  LOCATION MAP GRAPH
+
+  CORE METRICS
+  - aveRetweetCount
+  - aveFriendCount
+  - avReplyCount
+  - aveHashtagsInTweets
+
+  SEMANTIC ANALYSIS
+  - avergae score
+  - percentagePosTweets are positive. Heres the most positive:strongPosTweets
+  - same for negative
+
+  Actions:
+  - Andrei timeout issues
+  - Time graph
+  - Location graph
