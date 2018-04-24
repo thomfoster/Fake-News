@@ -493,13 +493,25 @@ def get_score_data(tweets):
     
     #32.'retweet_count_ave'
     r = []
+    topRetweets = [0,0,0]
+    popularTweets = [None, None, None]
     for tweet in tweetlist:
-        r.append(tweet['retweet_count'])
+        ret = tweet['retweet_count']
+        r.append(ret)
+        i = 0
+        while i < len(topRetweets) and ret < topRetweets[i]:
+            i = i +1
+        if i < len(topRetweets):
+            topRetweets.insert(i, ret)
+            popularTweets.insert(i, tweet['id'])
+            topRetweets = topRetweets[:-1]
+            popularTweets = popularTweets[:-1]
     av= np.mean(r)
     metrics.append(av)
     
     outData['aveRetweetCount'] = av
     outData['retweetCounts'] = r
+    outData['popularTweets'] = popularTweets
     
     #33.'retweet_count_var'
     va=np.var(r)
