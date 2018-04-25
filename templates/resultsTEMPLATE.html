@@ -10,6 +10,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='jquery-circle-progress/dist/circle-progress.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='chart-js/Chart.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='twitter-widgets/widgets.js') }}"></script>
 </head>
 
 <body>
@@ -31,15 +32,15 @@
 	</div>
 	</nav>
 
-	<br>
-
 	<div class="container">
-
+		<br>
+		<br>
 		<div class="jumbotron bg-dark">
 		<div class="row justify-content-between">
 			<div class="col-sm-7">
 				 <font color="white">
 				<b><h1 style="color: #28A745"> {{data['credScore']}}% </h1></b>
+				<br>
 				<h3> The overall truth rating of <b> {{data['nTweets']}} </b> tweets relating to <b>{{search_string}}</b> </h3>
 				<br>
 				</font>
@@ -58,16 +59,16 @@
 		</div>
 		</div>
 
+		<br>
 		<h3>Core Metrics:</h3>
 		<hr>
-
 		<div class="row">
 
 		<div class="col">
 			<div class="card bg-light" style="width:250px">
 				<div class="card-body">
-					<h4 class="card-title">Average Retweet Count</h4>
-					<p class="card-text">{{data['aveRetweetCount']}}</p>
+					<h4 class="card-title">{{data['aveRetweetCount']}}</h4>
+					<p class="card-text">Average Retweet Count</p>
 				</div>
 			</div>
 		</div>
@@ -77,8 +78,8 @@
 		<div class="col">
 			<div class="card bg-light" style="width:250px">
 				<div class="card-body">
-					<h4 class="card-title">Average Follower Count Count</h4>
-					<p class="card-text">{{data['aveFriendCount']}}</p>
+					<h4 class="card-title">{{data['aveFriendCount']}}</h4>
+					<p class="card-text">Average Follower Count</p>
 				</div>
 			</div>
 		</div>
@@ -88,8 +89,8 @@
 		<div class="col">
 			<div class="card bg-light" style="width:250px">
 				<div class="card-body">
-					<h4 class="card-title">Average Reply Count</h4>
-					<p class="card-text">{{data['avReplyCount']}}</p>
+					<h4 class="card-title">{{data['avReplyCount']}}</h4>
+					<p class="card-text">Average Reply Count</p>
 				</div>
 			</div>
 		</div>
@@ -99,8 +100,8 @@
 		<div class="col">
 			<div class="card bg-light" style="width:250px">
 				<div class="card-body">
-					<h4 class="card-title">Average Hashtag Count</h4>
-					<p class="card-text">{{data['aveHashtagsInTweets']}}</p>
+					<h4 class="card-title">{{data['aveHashtagsInTweets']}}</h4>
+					<p class="card-text">Average Hashtag Count</p>
 				</div>
 			</div>
 		</div>
@@ -109,16 +110,19 @@
 
 		</div>
 
+		<br>
+		<br>
 		<br>
 		<h3>Important Tweets Relating to Your Story</h3>
 		<hr>
-
 		<div class="row justify-content-center">
-			<div class="col-4">VERIFIED USERS TWEETS</div>
-			<div class="col-4">VERIFIED USERS TWEETS</div>
-			<div class="col-4">VERIFIED USERS TWEETS</div>
+			<div class="col-4"><div class="tweet" id="{{data['tweetsByVerified'][0]}}"></div></div>
+			<div class="col-4"><div class="tweet" id="{{data['tweetsByVerified'][1]}}"></div></div>
+			<div class="col-4"><div class="tweet" id="{{data['tweetsByVerified'][2]}}"></div></div>
 		</div>
 
+		<br>
+		<br>
 		<br>
 		<h3>Semantic Analysis:</h3>
 		<hr>
@@ -145,16 +149,22 @@
 	 		</script>
 		</div>
 		<div class="col-4">
-			<p> EMBED MOST POSITIVE TWEET HERE </p>
+			<br>
+			<h5> Most positive related tweet: </h5>
+			<div class="tweet" id="{{data['strongPosTweets'][0]}}"></div>
 		</div>
 		<div class="col-4">
-			<p> EMBED MOST NEGATIVE TWEET HERE </p>
+			<br>
+			<h5> Most negative related tweet: </h5>
+			<div class="tweet" id="{{data['strongNegTweets'][0]}}"></div>
 		</div>
 		</div>
+
+		<br>
+		<br>
 		<br>
 		<h3>How the story broke:</h3>
 		<hr>
-
 		<div class="row justify-content-center">
 			<canvas id="chart" width="800" height="400"></canvas>
 			<script>
@@ -202,6 +212,25 @@
 		</div>
 
 	</div>
+
+	<script>
+	var tweets = jQuery(".tweet");
+
+	jQuery(tweets).each( function( t, tweet ) {
+
+	var id = jQuery(this).attr('id');
+
+	twttr.widgets.createTweet(
+		id, tweet,
+		{
+			conversation : 'none',    // or all
+			cards        : 'hidden',  // or visible
+			linkColor    : '#cc0000', // default is blue
+			theme        : 'light'    // or dark
+		});
+
+	});
+	</script>
 
 </body>
 

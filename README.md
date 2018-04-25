@@ -1,53 +1,13 @@
 # Fake-News
-Private repo for 2018 group design practical
 
-TODO:
-- [IMPLEMENT] auto hashtag formatting
-  - Wait until certain on input type
-- [ACTION]    ask group how tweets will be returned to you
-              research first as unlikely they will have ideas
-- [CONSIDER]  Loading time display issues
-- [CONSIDER]  Look into 1 pager to implement vision
-  - Would be one html page
-  - JQUERY does post and get requests
-  - sexy transitions
-  - loading screen
-  - How easy to keep going then switch out?
-    - transitions impossible with flask
-    - loading display solution is same regardless
-  - CONCLUSION: last resort
+SETUP INSTRUCTIONS
 
-VISION:
-- Single search bar, white on black, large hashtag + bar
-- hashtag is automatically added even on spacebar
-- press enter or hit search, search bar flies up and out, loading symbol flies up and in
-- when loaded, black background fades away to reveal white background and results
+On UNIX:
+  $ . fakenewsvenv/bin/activate
+  $ export FLASK_APP=server.py
+  $ python3 -m flask run
 
-OLD POINTS
-- [RESEARCHED] hosting
-  - easy for heroku
-- [IMPLEMENT GONE RIGHT] graphic for probability
-  - Used JQUERY add on
-  - copied folder from node_modules to static
-- [IMPLEMENT GONE WRONG] jumbotron for tweets
-  - Tweets wrong size so looked silly
-
-  WHATS GOING ON TWEETS ie verified
-  <!-- TIME SERIES GRAPH -->
-  LOCATION MAP GRAPH
-
-  CORE METRICS
-  - aveRetweetCount
-  - aveFriendCount
-  - avReplyCount
-  - aveHashtagsInTweets
-
-  SEMANTIC ANALYSIS
-  - avergae score
-  - percentagePosTweets are positive. Heres the most positive:strongPosTweets
-  - same for negative
-
-  Actions:
-  - Andrei timeout issues
-  - Time graph
-  - Location graph
+On Other:
+  - No idea as to the specifics, make python virtual enviroment run
+  - Then make sure FLASK_APP enviroment variable is set
+  - Run flask
