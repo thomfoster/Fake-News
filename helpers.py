@@ -35,3 +35,14 @@ def format_for_time_chart(data):
             previous_date = date
         values.append(v)
     return [labels, values, len(labels)]
+
+def format_data(data):
+    data['aveFriendCount'] = int(round(data['aveFriendCount']))
+    data['aveRetweetCount'] = int(round(data['aveRetweetCount']))
+    data['avReplyCount'] = int(round(data['avReplyCount']))
+    data['aveHashtagsInTweets'] = int(round(data['aveHashtagsInTweets']))
+    data['percentagePosTweets'] = int(round(100*data['percentagePosTweets']))/100
+    data['percentageNegTweets'] = int(round(100*data['percentageNegTweets']))/100
+    data['percentageNegTweets'] = int(round(data['percentageNegTweets']*100))/100
+    data['percentagePosTweets'] = int(round(data['percentagePosTweets']*100))/100
+    return data
