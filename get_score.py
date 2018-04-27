@@ -406,29 +406,39 @@ def get_score_data(tweets):
     #25.'urls_no'
     x=0
     res=0.0
+    urls = []
     for tweet in tweetlist:
         if 'entities' in tweet and 'urls' in tweet['entities'] and tweet['entities']['urls'] != []:
             x=x+1
+            for u in tweet['entities']['urls']:
+                if 'expanded_url' in u and u['expanded_url'] not in urls:
+                    urls.append(u['expanded_url'])
     res=x/n
     metrics.append(res)
-    
+
     outData['percentageTweetsWithUrl'] = res
     outData['tweetsWithUrl'] = x
+    outData['urls'] = urls
     
             
     #26.'ave_hashtags'
     x=0
     #res=0.0
     total = 0
+    hashtags = []
     for tweet in tweetlist:
         if 'entities' in tweet and 'hashtags' in tweet['entities'] and tweet['entities']['hashtags'] != []:
             x=x+1
             total += len(tweet['entities']['hashtags'])
+            for h in tweet['entities']['hashtags']:
+                if 'text' in h and h['text'] not in hashtags:
+                    hashtags.append(h['text'])
     #res=x/n
     #metrics.append(res)
     av = total/n
     metrics.append(av)
     outData['aveHashtagsInTweets'] = av
+    outData['hashtags'] = hashtags
     
     #27.'ave_symbols'
     x=0
