@@ -8,16 +8,20 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='jquery-circle-progress/dist/circle-progress.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='chart-js/Chart.min.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='twitter-widgets/widgets.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='tooltipster/dist/css/tooltipster.bundle.min.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='tooltipster/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css') }}"/>
+	<script type="text/javascript" src="{{ url_for('static', filename='tooltipster/dist/js/tooltipster.bundle.min.js') }}"></script>
 </head>
 
 <body>
 
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-between">
 	<div class="container">
-		<a class="navbar-brand" href={{ url_for('index') }}>Fake News Checker</a>
+		<a class="navbar-brand" href={{ url_for('index') }}>News Explorer</a>
 		<form action="/" method="POST" class="form-inline">
 			<div class="input-group">
 				<div class="input-group-prepend">
@@ -39,7 +43,8 @@
 		<div class="row justify-content-between">
 			<div class="col-sm-7">
 				 <font color="white">
-				<b><h1 style="color: #28A745"> {{data['credScore']}}% </h1></b>
+				<b><h1 style="color: #28A745"> {{data['credScore']}}%</h1></b>
+
 				<br>
 				<h3> The overall truth rating of <b> {{data['nTweets']}} </b> tweets relating to <b>{{search_string}}</b> </h3>
 				<br>
@@ -64,7 +69,7 @@
 		</div>
 
 		<br>
-		<h3>Core Metrics:</h3>
+		<h3>Core Metrics:  <img src="{{url_for('static', filename='q.png')}}" width="6px" height="9px" class="tooltipster" title="Some key metrics used by our machine learning model to calculate the credibility score of a tweet(s)"> </h3>
 		<hr>
 		<div class="row">
 
@@ -117,7 +122,7 @@
 		<br>
 		<br>
 		<br>
-		<h3>Important Tweets Relating to Your Story</h3>
+		<h3>Important Tweets Relating to Your Story  <img src="{{url_for('static', filename='q.png')}}" width="6px" height="9px" class="tooltipster" title="Tweets by verified users that aim to accurately describe what's going on"> </h3>
 		<hr>
 		<div class="row justify-content-center">
 			<div class="col-4"><div class="tweet1" id="{{data['tweetsByVerified'][0]}}"></div></div>
@@ -128,7 +133,7 @@
 		<br>
 		<br>
 		<br>
-		<h3>Sentiment Analysis:</h3>
+		<h3>Sentiment Analysis: <img src="{{url_for('static', filename='q.png')}}" width="6px" height="9px" class="tooltipster" title="Sentiment analysis tells you the general mood of the tweet. The graph shows the percentage of tweets that have a positive, negative and neutral outlook on the situation"></h3>
 		<hr>
 		<div class="row justify-content-center" id='semanticStuff'>
 			<br>
@@ -246,7 +251,7 @@
 		</div>
 
 		<br>
-		<h3>How the story broke:</h3>
+		<h3>How the story broke:  <img src="{{url_for('static', filename='q.png')}}" width="6px" height="9px" class="tooltipster" title="Volume of tweets relating to the story over time. Depending on the stories timescale, tweets are grouped by hours or minutes."> </h3>
 		<hr>
 		<div class="row justify-content-center">
 			<canvas id="chart" width="800" height="400"></canvas>
@@ -330,6 +335,13 @@
 		});
 
 	});
+
+	$(document).ready(function() {
+            $('.tooltip').tooltipster({
+							theme: 'tooltipster-shadow'
+						});
+        });
+
 	</script>
 
 </body>

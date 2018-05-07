@@ -17,7 +17,7 @@ def search():
 @app.route('/results/<search_string>')
 def results(search_string):
     data = fake_news_checker.check(search_string.replace('-', ' '))
-    if data['nTweets'] < 100:
+    if data['nTweets'] < 50:
         return redirect(url_for('fail', search_string=search_string))
     data = helpers.format_data(data)
     time_chart_data = helpers.format_for_time_chart(data)

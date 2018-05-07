@@ -34,7 +34,32 @@ def format_for_time_chart(data):
             labels.append(date)
             previous_date = date
         values.append(v)
+    if (len(values)>5):
+        return [labels, values, len(labels)]
+    # Group by hour
+    counts = dict()
+    for dt in creationTimes:
+        counts[dt[0] + ' at ' + dt[1][:4]] = 0
+    for dt in creationTimes:
+        counts[dt[0] + ' at ' + dt[1][:4]] += 1
+    counts = sorted(counts.items())
+    labels = []
+    values = []
+    previous_date = counts[0][0].split(' at ')[0]
+    labels.append(previous_date)
+    values.append(counts[0][1])
+    for (k,v) in counts[1:]:
+        # if (v == 0):
+        #     continue
+        date = k.split(' at ')[0]
+        if (previous_date == date):
+            labels.append('')
+        else:
+            labels.append(k)
+            previous_date = date
+        values.append(v)
     return [labels, values, len(labels)]
+
 
 def format_data(data):
     data['aveFriendCount'] = int(round(data['aveFriendCount']))
