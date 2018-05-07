@@ -585,6 +585,8 @@ def get_score_data(tweets):
     for tweet in tweetlist:
         if 'reply_count' in tweet:
             r.append(tweet['reply_count'])
+        else:
+            r.append(0)
     av= np.mean(r)
     outData['replyCounts'] = r
     outData['avReplyCount'] = av
