@@ -70,7 +70,7 @@ def get_score_data(tweets):
     x = 0
     res = 0.0
     for i in range(len(tweetlist)):
-        if tweetlist[i]['in_reply_to_status_id_str'] != None:
+        if 'in_reply_to_status_id_str' in tweetlist[i] and tweetlist[i]['in_reply_to_status_id_str'] != None:
             x=x+1
     res=x/n
     metrics.append(res)
@@ -79,7 +79,8 @@ def get_score_data(tweets):
     # timeseries is a list of creation time of tweets
     timeseries = []
     for x in range(len(tweetlist)):
-        timeseries.append(datetime.strptime(tweetlist[x]['created_at'], '%a %b %d %H:%M:%S %z %Y'))
+        if 'created_at' in tweetlist[x]:
+            timeseries.append(datetime.strptime(tweetlist[x]['created_at'], '%a %b %d %H:%M:%S %z %Y'))
     earliesttime = timeseries[0]
     earliesttimeentry = 0
     latesttime = timeseries[0]
@@ -131,69 +132,70 @@ def get_score_data(tweets):
     #for i in range(31):
     #    timelist[i] = 0
     for tweet in tweetlist:
-        time_zone = tweet['user']['time_zone'] 
-        if time_zone in ["International Date Line West","Midway Island","Samoa"]:
-            timelist[0] = timelist[0] + 1
-        elif time_zone in ["Hawaii"]:
-            timelist[1] = timelist[1] + 1
-        elif time_zone in ["Alaska"]:
-            timelist[2] = timelist[2] + 1
-        elif time_zone in ["Pacific Time (US & Canada)","Tijuana","Arizona","Chihuahua","Mazatlan"]:
-            timelist[3] = timelist[3] + 1
-        elif time_zone in ["Mountain Time (US & Canada)","Saskachewan","Guadalajara","Mexico City","Monterrey","Central America"]:
-            timelist[4] = timelist[4] + 1
-        elif time_zone in ["Central Time (US & Canada","Bogota","Lima","Quito"]:
-            timelist[5] = timelist[5] + 1
-        elif time_zone in ["Eastern Time (US & Canada)","Indiana (East)","Caracas","La Paz","Georgetown"]:
-            timelist[6] = timelist[6] + 1
-        elif time_zone in ["Atlantic Time (Canada)","Santiago","Brasilia","Buenos Aires"]:
-            timelist[7] = timelist[7] + 1
-        elif time_zone in ["Newfoundland"]:
-            timelist[8] = timelist[8] + 1
-        elif time_zone in ["Greenland","Mid-Atlantic"]:
-            timelist[9] = timelist[9] + 1
-        elif time_zone in ["Cape Verde Is."]:
-            timelist[10] = timelist[10] + 1
-        elif time_zone in ["Azores","Monrovia","UTC"]:
-            timelist[11] = timelist[11] + 1
-        elif time_zone in ["Dublin","Edinburgh","London","Lisbon","Casablanca","West Central Africa"]:
-            timelist[12] = timelist[12] + 1
-        elif time_zone in ["Belgrade","Bratislava","Budapest","Ljubljana","Prague","Sarajevo","Skopje","Warsaw","Zagreb","Brussels","Copenhagen","Madrid","Paris","Amsterdam","Berlin","Bern","Rome","Stockholm","Vienna","Cairo","Harare","Pretoria"]:
-            timelist[13] = timelist[13] + 1
-        elif time_zone in ["Bucharest","Helsinki","Kiev","Kyiv","Riga","Sofia","Tallinn","Vilnius","Athens","Istanbul","Minsk","Jerusalem","Moscow","St. Petersburg","Volgograd","Kuwait","Riyadh","Nairobi","Baghdad"]:
-            timelist[14] = timelist[14] + 1
-        elif time_zone in ["Abu Dhabi","Muscat","Baku","Tbilisi","Yerevan"]:
-            timelist[15] = timelist[15] + 1
-        elif time_zone in ["Tehran","Kabul"]:
-            timelist[16] = timelist[16] + 1
-        elif time_zone in ["Ekaterinburg","Islamabad","Karachi","Tashkent"]:
-            timelist[17] = timelist[17] + 1
-        elif time_zone in ["Chennai","Kolkata","Mumbai","New Delhi","Sri Jayawardenepura"]:
-            timelist[18] = timelist[18] + 1
-        elif time_zone in ["Kathmandu"]:
-            timelist[19] = timelist[19] + 1
-        elif time_zone in ["Astana","Dhaka","Almaty","Urumqi"]:
-            timelist[20] = timelist[20] + 1
-        elif time_zone in ["Rangoon"]:
-            timelist[21] = timelist[21] + 1
-        elif time_zone in ["Novosibirsk","Bangkok","Hanoi","Jakarta","Krasnoyarsk"]:
-            timelist[22] = timelist[22] + 1
-        elif time_zone in ["Beijing","Chongqing","Hong Kong","Kuala Lumpur","Singapore","Taipei","Perth","Irkutsk","Ulaan Bataar"]:
-            timelist[23] = timelist[23] + 1
-        elif time_zone in ["Soeul","Osaka","Sapporo","Tokyo","Yakutsk"]:
-            timelist[24] = timelist[24] + 1
-        elif time_zone in ["Darwin"]:
-            timelist[25] = timelist[25] + 1
-        elif time_zone in ["Brisbane","Vladivostok","Guam","Port Moresby","Solomon Is."]:
-            timelist[26] = timelist[26] + 1
-        elif time_zone in ["Adelaide"]:
-            timelist[27] = timelist[27] + 1
-        elif time_zone in ["Canberra","Melbourne","Sydney","Hobart","Magadan","New Caledonia"]:
-            timelist[28] = timelist[28] + 1
-        elif time_zone in ["Fiji","Kamchatka","Marshall Is."]:
-            timelist[29] = timelist[29] + 1
-        elif time_zone in ["Auckland","Wellington","Nuku'alofa"]:
-            timelist[30] = timelist[30] + 1
+        if 'user' in tweet and 'time_zone' in tweet['user']:
+            time_zone = tweet['user']['time_zone'] 
+            if time_zone in ["International Date Line West","Midway Island","Samoa"]:
+                timelist[0] = timelist[0] + 1
+            elif time_zone in ["Hawaii"]:
+                timelist[1] = timelist[1] + 1
+            elif time_zone in ["Alaska"]:
+                timelist[2] = timelist[2] + 1
+            elif time_zone in ["Pacific Time (US & Canada)","Tijuana","Arizona","Chihuahua","Mazatlan"]:
+                timelist[3] = timelist[3] + 1
+            elif time_zone in ["Mountain Time (US & Canada)","Saskachewan","Guadalajara","Mexico City","Monterrey","Central America"]:
+                timelist[4] = timelist[4] + 1
+            elif time_zone in ["Central Time (US & Canada","Bogota","Lima","Quito"]:
+                timelist[5] = timelist[5] + 1
+            elif time_zone in ["Eastern Time (US & Canada)","Indiana (East)","Caracas","La Paz","Georgetown"]:
+                timelist[6] = timelist[6] + 1
+            elif time_zone in ["Atlantic Time (Canada)","Santiago","Brasilia","Buenos Aires"]:
+                timelist[7] = timelist[7] + 1
+            elif time_zone in ["Newfoundland"]:
+                timelist[8] = timelist[8] + 1
+            elif time_zone in ["Greenland","Mid-Atlantic"]:
+                timelist[9] = timelist[9] + 1
+            elif time_zone in ["Cape Verde Is."]:
+                timelist[10] = timelist[10] + 1
+            elif time_zone in ["Azores","Monrovia","UTC"]:
+                timelist[11] = timelist[11] + 1
+            elif time_zone in ["Dublin","Edinburgh","London","Lisbon","Casablanca","West Central Africa"]:
+                timelist[12] = timelist[12] + 1
+            elif time_zone in ["Belgrade","Bratislava","Budapest","Ljubljana","Prague","Sarajevo","Skopje","Warsaw","Zagreb","Brussels","Copenhagen","Madrid","Paris","Amsterdam","Berlin","Bern","Rome","Stockholm","Vienna","Cairo","Harare","Pretoria"]:
+                timelist[13] = timelist[13] + 1
+            elif time_zone in ["Bucharest","Helsinki","Kiev","Kyiv","Riga","Sofia","Tallinn","Vilnius","Athens","Istanbul","Minsk","Jerusalem","Moscow","St. Petersburg","Volgograd","Kuwait","Riyadh","Nairobi","Baghdad"]:
+                timelist[14] = timelist[14] + 1
+            elif time_zone in ["Abu Dhabi","Muscat","Baku","Tbilisi","Yerevan"]:
+                timelist[15] = timelist[15] + 1
+            elif time_zone in ["Tehran","Kabul"]:
+                timelist[16] = timelist[16] + 1
+            elif time_zone in ["Ekaterinburg","Islamabad","Karachi","Tashkent"]:
+                timelist[17] = timelist[17] + 1
+            elif time_zone in ["Chennai","Kolkata","Mumbai","New Delhi","Sri Jayawardenepura"]:
+                timelist[18] = timelist[18] + 1
+            elif time_zone in ["Kathmandu"]:
+                timelist[19] = timelist[19] + 1
+            elif time_zone in ["Astana","Dhaka","Almaty","Urumqi"]:
+                timelist[20] = timelist[20] + 1
+            elif time_zone in ["Rangoon"]:
+                timelist[21] = timelist[21] + 1
+            elif time_zone in ["Novosibirsk","Bangkok","Hanoi","Jakarta","Krasnoyarsk"]:
+                timelist[22] = timelist[22] + 1
+            elif time_zone in ["Beijing","Chongqing","Hong Kong","Kuala Lumpur","Singapore","Taipei","Perth","Irkutsk","Ulaan Bataar"]:
+                timelist[23] = timelist[23] + 1
+            elif time_zone in ["Soeul","Osaka","Sapporo","Tokyo","Yakutsk"]:
+                timelist[24] = timelist[24] + 1
+            elif time_zone in ["Darwin"]:
+                timelist[25] = timelist[25] + 1
+            elif time_zone in ["Brisbane","Vladivostok","Guam","Port Moresby","Solomon Is."]:
+                timelist[26] = timelist[26] + 1
+            elif time_zone in ["Adelaide"]:
+                timelist[27] = timelist[27] + 1
+            elif time_zone in ["Canberra","Melbourne","Sydney","Hobart","Magadan","New Caledonia"]:
+                timelist[28] = timelist[28] + 1
+            elif time_zone in ["Fiji","Kamchatka","Marshall Is."]:
+                timelist[29] = timelist[29] + 1
+            elif time_zone in ["Auckland","Wellington","Nuku'alofa"]:
+                timelist[30] = timelist[30] + 1
         
     numberofzones = 0
     for i in range(len(timelist)):
@@ -213,7 +215,7 @@ def get_score_data(tweets):
     x=0
     res=0.0
     for tweet in tweetlist:
-        if tweet['user']['has_extended_profile'] != False:
+        if 'user' in tweet and 'has_extended_profile' in tweet['user'] and tweet['user']['has_extended_profile'] != False:
             x=x+1
     res=x/n
     metrics.append(res)
@@ -222,7 +224,7 @@ def get_score_data(tweets):
     x=0
     res=0.0
     for tweet in tweetlist:
-        if tweet['user']['default_profile'] != False:
+        if 'user' in tweet and 'default_profile' in tweet['user'] and tweet['user']['default_profile'] != False:
             x=x+1
     res=x/n
     metrics.append(res)
@@ -233,7 +235,7 @@ def get_score_data(tweets):
     #9.'name_length_ave'
     totallength = 0
     for tweet in tweetlist:
-        if tweet['user']['name'] != None:
+        if 'user' in tweet and 'name' in tweet['user'] and tweet['user']['name'] != None:
             totallength = totallength + len(tweet['user']['name'])
     averagelength = totallength/n
     metrics.append(averagelength)
@@ -241,7 +243,8 @@ def get_score_data(tweets):
     #10.'created_at_ave_after_first_user'
     user_created = []
     for tweet in tweetlist:
-       user_created.append(datetime.strptime(tweet['user']['created_at'], '%a %b %d %H:%M:%S %z %Y'))
+       if 'user' in tweet and 'created_at' in tweet['user']:
+           user_created.append(datetime.strptime(tweet['user']['created_at'], '%a %b %d %H:%M:%S %z %Y'))
     earliesttime = user_created[0]
     earliesttimeentry = 0
     for ct in user_created:
@@ -263,7 +266,8 @@ def get_score_data(tweets):
     #11.'followers_count_ave'
     followers = []
     for tweet in tweetlist:
-        followers.append(tweet['user']['followers_count'])
+        if 'user' in tweet and 'followers_count' in tweet['user']:
+            followers.append(tweet['user']['followers_count'])
     av= np.mean(followers)
     metrics.append(av)
     
@@ -283,7 +287,8 @@ def get_score_data(tweets):
     #13.'favourites_count_ave'
     favs = []
     for tweet in tweetlist:
-        favs.append(tweet['user']['favourites_count'])
+        if 'user' in tweet and 'favourites_count' in tweet['user']:
+            favs.append(tweet['user']['favourites_count'])
     av= np.mean(favs)
     metrics.append(av)
     
@@ -294,9 +299,10 @@ def get_score_data(tweets):
     totallength = 0
     totalsquare = 0
     for tweet in tweetlist:
-        if tweet['user']['screen_name'] != None:
-            totallength = totallength + len(tweet['user']['screen_name'])
-            totalsquare = totalsquare + len(tweet['user']['screen_name'])*len(tweet['user']['screen_name'])
+        if 'user' in tweet and 'screen_name' in tweet['user'] and tweet['user']['screen_name'] != None:
+            name = tweet['user']['screen_name']
+            totallength = totallength + len(name)
+            totalsquare = totalsquare + len(name)*len(name)
     averagelength = totallength/n
     metrics.append(averagelength)
     
@@ -311,9 +317,10 @@ def get_score_data(tweets):
     tweets_by_verified = []
     verified_user = []
     for t in range(len(tweetlist)):
-        if tweetlist[t]['user']['verified'] != False:
+        if 'user' in tweetlist[t] and 'verified' in tweetlist[t]['user'] and tweetlist[t]['user']['verified'] != False:
             x=x+1
-            verified_user.append(tweet['user']['screen_name'])
+            if 'screen_name' in tweet['user']:
+                verified_user.append(tweet['user']['screen_name'])
             tweets_by_verified.append(tweets[t]['id'])
     res=x/n
     metrics.append(res)
@@ -326,7 +333,8 @@ def get_score_data(tweets):
     #17.'friends_count_ave'
     f = []
     for tweet in tweetlist:
-        f.append(tweet['user']['friends_count'])
+        if 'user' in tweet and 'friends_count' in tweet['user']:
+            f.append(tweet['user']['friends_count'])
     av= np.mean(f)
     metrics.append(av)
     
@@ -351,7 +359,8 @@ def get_score_data(tweets):
     #20. 'statuses_count_ave'
     s = []
     for tweet in tweetlist:
-        s.append(tweet['user']['statuses_count'])
+        if 'user' in tweet and 'statuses_count' in tweet['user']:
+            s.append(tweet['user']['statuses_count'])
     av= np.mean(s)
     metrics.append(av)
     
@@ -366,7 +375,7 @@ def get_score_data(tweets):
     x=0
     res=0.0
     for tweet in tweetlist:
-        if tweet['user']['lang'] != 'en':
+        if 'user' in tweet and 'lang' in tweet['user'] and tweet['user']['lang'] != 'en':
             x=x+1
     res=x/n
     metrics.append(res)
@@ -387,7 +396,7 @@ def get_score_data(tweets):
     x=0
     res=0.0
     for tweet in tweetlist:
-        if tweet['user']['url'] != None:
+        if 'user' in tweet and 'url' in tweet['user'] and tweet['user']['url'] != None:
             x=x+1
     res=x/n
     #metrics.append(res)
@@ -397,36 +406,46 @@ def get_score_data(tweets):
     #25.'urls_no'
     x=0
     res=0.0
+    urls = []
     for tweet in tweetlist:
-        if tweet['entities']['urls'] != []:
+        if 'entities' in tweet and 'urls' in tweet['entities'] and tweet['entities']['urls'] != []:
             x=x+1
+            for u in tweet['entities']['urls']:
+                if 'expanded_url' in u and u['expanded_url'] not in urls:
+                    urls.append(u['expanded_url'])
     res=x/n
     metrics.append(res)
-    
+
     outData['percentageTweetsWithUrl'] = res
     outData['tweetsWithUrl'] = x
+    outData['urls'] = urls
     
             
     #26.'ave_hashtags'
     x=0
     #res=0.0
     total = 0
+    hashtags = []
     for tweet in tweetlist:
-        if tweet['entities']['hashtags'] != []:
+        if 'entities' in tweet and 'hashtags' in tweet['entities'] and tweet['entities']['hashtags'] != []:
             x=x+1
             total += len(tweet['entities']['hashtags'])
+            for h in tweet['entities']['hashtags']:
+                if 'text' in h and h['text'] not in hashtags:
+                    hashtags.append(h['text'])
     #res=x/n
     #metrics.append(res)
     av = total/n
     metrics.append(av)
     outData['aveHashtagsInTweets'] = av
+    outData['hashtags'] = hashtags
     
     #27.'ave_symbols'
     x=0
     res=0.0
     total = 0
     for tweet in tweetlist:
-        if tweet['entities']['symbols'] != []:
+        if 'entities' in tweet and 'symbols' in tweet['entities'] and tweet['entities']['symbols'] != []:
             x=x+1
             total += len(tweet['entities']['symbols'])
     #res=x/n
@@ -437,7 +456,8 @@ def get_score_data(tweets):
     #28.'favorite_count_ave'
     fav = []
     for tweet in tweetlist:
-        fav.append(tweet['favorite_count'])
+        if 'favorite_count' in tweet:
+            fav.append(tweet['favorite_count'])
     av= np.mean(fav)
     metrics.append(av)
     
@@ -453,7 +473,7 @@ def get_score_data(tweets):
     x=0
     res=0.0
     for tweet in tweetlist:
-        if tweet['place'] != None:
+        if 'place' in tweet and tweet['place'] != None:
             x=x+1
     res=x/n
     metrics.append(res)
@@ -466,7 +486,7 @@ def get_score_data(tweets):
     tweetsSemaScore = []
     analyzer = SentimentIntensityAnalyzer()
     for tweet in tweetlist:
-        if tweet['text'] != None:
+        if 'text' in tweet and tweet['text'] != None:
             totallength = totallength + len(tweet['text'])
             scores = analyzer.polarity_scores(tweet['text'])
             tweetsSemaScore.append(scores['compound'])
@@ -496,7 +516,10 @@ def get_score_data(tweets):
     topRetweets = [0,0,0]
     popularTweets = [None, None, None]
     for tweet in tweetlist:
-        ret = tweet['retweet_count']
+        if 'retweet_count' in tweet:
+            ret = tweet['retweet_count']
+        else:
+            ret = 0
         r.append(ret)
         i = 0
         while i < len(topRetweets) and ret < topRetweets[i]:
@@ -535,7 +558,8 @@ def get_score_data(tweets):
        1.'created_at_ave_after_first_time', 2.'created_at_var', 
        ###3.'is_quote_status',
        4.'time_zone', 5.'time_zone_var', 
-       6.'has_extended_profile', 7.'default_profile',
+       6.'has_extended_profile', 
+       7.'default_profile',
        8.'name_length_ave', 9.'created_at_ave_after_first_user',
        10.'followers_count_ave',11.'followers_count_var',
        12.'favourites_count_ave',
@@ -559,7 +583,8 @@ def get_score_data(tweets):
     #reply count
     r = []
     for tweet in tweetlist:
-        r.append(tweet['retweet_count'])
+        if 'reply_count' in tweet:
+            r.append(tweet['reply_count'])
     av= np.mean(r)
     outData['replyCounts'] = r
     outData['avReplyCount'] = av
@@ -567,7 +592,7 @@ def get_score_data(tweets):
     #coordinates
     c = []
     for tweet in tweetlist:
-        if tweet['coordinates'] != None:
+        if 'coordinates' in tweet and tweet['coordinates'] != None:
             c.append(tweet['coordinates']['coordinates'])
     outData['tweetsCoordinates'] = c
     
