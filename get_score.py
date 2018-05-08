@@ -326,7 +326,7 @@ def get_score_data(tweets):
     metrics.append(res)
     
     #tweets by verified user
-    outData['tweetsByVerified'] = tweets_by_verified
+    #outData['tweetsByVerified'] = tweets_by_verified
     outData['verifiedUsers'] = verified_user
     
     
@@ -535,6 +535,9 @@ def get_score_data(tweets):
     outData['aveRetweetCount'] = av
     outData['retweetCounts'] = r
     outData['popularTweets'] = popularTweets
+    
+    tweets_by_verified = list(filter(lambda x: x not in popularTweets, tweets_by_verified))
+    outData['tweetsByVerified'] = tweets_by_verified
     
     #33.'retweet_count_var'
     va=np.var(r)
