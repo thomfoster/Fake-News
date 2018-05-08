@@ -393,6 +393,7 @@ def get_score_data(tweets):
     '''
     
     #24.'non_url_no'(!!NOT IN METRICS)
+    '''
     x=0
     res=0.0
     for tweet in tweetlist:
@@ -402,45 +403,47 @@ def get_score_data(tweets):
     #metrics.append(res)
     
     outData['percentageUsersWithUrl'] = res
+    '''
     
     #25.'urls_no'
     x=0
     res=0.0
-    urls = []
+    #urls = []
     for tweet in tweetlist:
         if 'entities' in tweet and 'urls' in tweet['entities'] and tweet['entities']['urls'] != []:
             x=x+1
-            for u in tweet['entities']['urls']:
-                if 'expanded_url' in u and u['expanded_url'] not in urls:
-                    urls.append(u['expanded_url'])
+            #for u in tweet['entities']['urls']:
+            #    if 'expanded_url' in u and u['expanded_url'] not in urls:
+            #        urls.append(u['expanded_url'])
     res=x/n
     metrics.append(res)
 
-    outData['percentageTweetsWithUrl'] = res
-    outData['tweetsWithUrl'] = x
-    outData['urls'] = urls
+    #outData['percentageTweetsWithUrl'] = res
+    #outData['tweetsWithUrl'] = x
+    #outData['urls'] = urls
     
             
     #26.'ave_hashtags'
     x=0
     #res=0.0
     total = 0
-    hashtags = []
+    #hashtags = []
     for tweet in tweetlist:
         if 'entities' in tweet and 'hashtags' in tweet['entities'] and tweet['entities']['hashtags'] != []:
             x=x+1
             total += len(tweet['entities']['hashtags'])
-            for h in tweet['entities']['hashtags']:
-                if 'text' in h and h['text'] not in hashtags:
-                    hashtags.append(h['text'])
+            #for h in tweet['entities']['hashtags']:
+            #    if 'text' in h and h['text'] not in hashtags:
+            #        hashtags.append(h['text'])
     #res=x/n
     #metrics.append(res)
     av = total/n
     metrics.append(av)
     outData['aveHashtagsInTweets'] = av
-    outData['hashtags'] = hashtags
+    #outData['hashtags'] = hashtags
     
     #27.'ave_symbols'
+    '''
     x=0
     res=0.0
     total = 0
@@ -452,6 +455,7 @@ def get_score_data(tweets):
     #metrics.append(res)
     av = total/n 
     outData['aveSymbolsInTweets'] = av
+    '''
     
     #28.'favorite_count_ave'
     fav = []
@@ -508,6 +512,7 @@ def get_score_data(tweets):
             tweetsWithStrongPos.append(tweetlist[i]['id'])
         elif tweetsSemaScore[i] < min(lowerPercentile, 0):
             tweetsWithStrongNeg.append(tweetlist[i]['id'])
+            
     metrics.append(averagelength)
         
     
@@ -522,13 +527,20 @@ def get_score_data(tweets):
             ret = 0
         r.append(ret)
         i = 0
-        while i < len(topRetweets) and ret < topRetweets[i]:
+        while i < len(topRetweets) and ret <= topRetweets[i]:
             i = i +1
         if i < len(topRetweets):
-            topRetweets.insert(i, ret)
-            popularTweets.insert(i, tweet['id'])
-            topRetweets = topRetweets[:-1]
-            popularTweets = popularTweets[:-1]
+            if tweet['id'] in tweets_by_verified and len(tweets_by_verified)>3:   
+                topRetweets.insert(i, ret)
+                popularTweets.insert(i, tweet['id'])
+                topRetweets = topRetweets[:-1]
+                popularTweets = popularTweets[:-1]
+                tweets_by_verified = list(filter(lambda x: not (x == tweet['id']), tweets_by_verified)) 
+            elif tweet['id'] not in tweets_by_verified:
+                topRetweets.insert(i, ret)
+                popularTweets.insert(i, tweet['id'])
+                topRetweets = topRetweets[:-1]
+                popularTweets = popularTweets[:-1]
     av= np.mean(r)
     metrics.append(av)
     
@@ -536,7 +548,7 @@ def get_score_data(tweets):
     outData['retweetCounts'] = r
     outData['popularTweets'] = popularTweets
     
-    tweets_by_verified = list(filter(lambda x: x not in popularTweets, tweets_by_verified))
+    #tweets_by_verified = list(filter(lambda x: x not in popularTweets, tweets_by_verified)) 
     outData['tweetsByVerified'] = tweets_by_verified
     
     #33.'retweet_count_var'
@@ -595,11 +607,13 @@ def get_score_data(tweets):
     outData['avReplyCount'] = av
     
     #coordinates
+    '''
     c = []
     for tweet in tweetlist:
         if 'coordinates' in tweet and tweet['coordinates'] != None:
             c.append(tweet['coordinates']['coordinates'])
     outData['tweetsCoordinates'] = c
+    '''
     
     #calculate credibility score
     data_scaled_normal = normalizer.transform(scaler.transform(np.array(metrics).reshape(1,-1)))
