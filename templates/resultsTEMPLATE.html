@@ -21,7 +21,9 @@
 
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-between">
 	<div class="container">
-		<a class="navbar-brand" href={{ url_for('index') }}><b>TweetMind</b> News Explorer</a>
+		<a class="navbar-brand" href={{ url_for('index') }}>
+		<img src="{{ url_for('static', filename='logo.png') }}" width="50" height="50" class="d-inline-block align-middle" alt=""/>
+		<h1><b>TweetMind</b> News Explorer</a></h1>
 		<form action="/" method="POST" class="form-inline">
 			<div class="input-group">
 				<div class="input-group-prepend">

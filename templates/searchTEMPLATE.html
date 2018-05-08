@@ -18,12 +18,10 @@
 	</div>
 	</nav>
 
-	<br>
-
 	<div class="container">
 
-		<div class="row justify-content-center">
-            <div class="col-">
+		<div class="row justify-content-between">
+            <div class="col-8">
                 <br>
                 <br>
                 <br>
@@ -31,6 +29,14 @@
                 <br>
 								<p>We'll search for tweets related to your search, and apply our <b>machine learning model</b> to give you the key information you need to write your story.</p>
                 <br>
+
+							</div>
+							<div class="col-3">
+						 		<img src="{{ url_for('static', filename='logo1.png') }}" width="250" height="250"s alt=""/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
 								<form method="POST">
 	                <div class="input-group mb-3">
 	                    <div class="input-group-prepend">
@@ -88,7 +94,10 @@
 				</div>
 
             </div>
+
         </div>
+
+
 
 	</div>
 
