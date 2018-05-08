@@ -4,7 +4,7 @@ def url_from_form(form_data):
     return "-".join(form_data.split())
 
 def readable_from_url(url):
-    return " #"+" #".join(url.split('-'))
+    return " "+" ".join(url.split('-'))
 
 def get_credentials():
     with open('credentials.txt', 'r') as cred_file:
@@ -62,10 +62,10 @@ def format_for_time_chart(data):
 
 
 def format_data(data):
-    data['aveFriendCount'] = int(round(data['aveFriendCount']))
-    data['aveRetweetCount'] = int(round(data['aveRetweetCount']))
-    data['avReplyCount'] = int(round(data['avReplyCount']))
-    data['aveHashtagsInTweets'] = int(round(data['aveHashtagsInTweets']))
+    data['aveFriendCount']      = int(round(data['aveFriendCount']))
+    data['aveRetweetCount']     = int(round(data['aveRetweetCount']))
+    data['avReplyCount']        = int(round(100*data['avReplyCount']))/100
+    data['aveHashtagsInTweets'] = int(round(100*data['aveHashtagsInTweets']))/100
     data['percentagePosTweets'] = int(round(100*data['percentagePosTweets']))/100
     data['percentageNegTweets'] = int(round(100*data['percentageNegTweets']))/100
     data['percentageNegTweets'] = int(round(data['percentageNegTweets']*100))/100
