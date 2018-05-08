@@ -122,17 +122,6 @@
 		<br>
 		<br>
 		<br>
-		<h3>Popular Tweets Relating to Your Story  <img src="{{url_for('static', filename='q.png')}}" width="6px" height="9px" class="tooltipster" title="The most reacted to tweets relating to your story"> </h3>
-		<hr>
-		<div class="row justify-content-center">
-			<div class="col-4"><div class="tweet1" id="{{data['popularTweets'][0]}}"></div></div>
-			<div class="col-4"><div class="tweet1" id="{{data['popularTweets'][1]}}"></div></div>
-			<div class="col-4"><div class="tweet1" id="{{data['popularTweets'][2]}}"></div></div>
-		</div>
-
-		<br>
-		<br>
-		<br>
 		<h3>Sentiment Analysis: <img src="{{url_for('static', filename='q.png')}}" width="6px" height="9px" class="tooltipster" title="Sentiment analysis tells you the general mood of the tweet. The graph shows the percentage of tweets that have a positive, negative and neutral outlook on the situation"></h3>
 		<hr>
 		<div class="row justify-content-center" id='semanticStuff'>
@@ -250,6 +239,18 @@
 		</div>
 		</div>
 
+		<br>
+		<br>
+		<br>
+		<h3>Popular Tweets Relating to Your Story  <img src="{{url_for('static', filename='q.png')}}" width="6px" height="9px" class="tooltipster" title="The most reacted to tweets relating to your story"> </h3>
+		<hr>
+		<div class="row justify-content-center">
+			<div class="col-4"><div class="tweet1" id="{{data['popularTweets'][0]}}"></div></div>
+			<div class="col-4"><div class="tweet1" id="{{data['popularTweets'][1]}}"></div></div>
+			<div class="col-4"><div class="tweet1" id="{{data['popularTweets'][2]}}"></div></div>
+		</div>
+
+		<br>
 		<br>
 		<h3>How the story broke:  <img src="{{url_for('static', filename='q.png')}}" width="6px" height="9px" class="tooltipster" title="Volume of tweets relating to the story over time. Depending on the stories timescale, tweets are grouped by hours or minutes."> </h3>
 		<hr>
